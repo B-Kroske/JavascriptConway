@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC>
+<html>
+	<head>
+		<title>Conway's Game of Life</title>
+		<!-- Link to the JS-file -->
+		<script type="text/javascript" src="Conway.js"></script>
+		
+		<style type="text/css">
+			canvas { border: 1px solid black; }
+		</style>
+	</head>
+	<body onload="initCanvas();" >
+	
+		<!--<p onclick="greeting()">Click Here</p>
+		<p onclick="farewell()">Click Here Too</p>
+		<p><script type="text/javascript" src="HelloWorld.js">Testing 1, 2, 3...</script></p>
+		-->
+		<canvas id="board" width="200" height="200" onclick=handleEvent(event)></canvas>
+		<p onclick="initCanvas2();">Run</p>
+		<p onclick="initCanvas();">Stop</p>
+	</body>
+</html>
