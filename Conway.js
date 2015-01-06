@@ -1,7 +1,7 @@
 //The gameboard
 var boardVals;
 
-var cellSide = 20;
+var cellSide = (window.innerWidth - 20) / 16
 var cellMid = cellSide / 2;
 
 var canvas;
@@ -11,56 +11,62 @@ var cellXCount;
 var cellYCount;
 
 var runVar;
+var running = false;
 
 //Draw the lines to divide the canvas into squares
 function initCanvas()
 {
-canvas = document.getElementById("board");
+	canvas = document.getElementById("board");
 
-if(canvas.getContext) {
-	ctx = canvas.getContext("2d");
-	var width = canvas.width;
-	var height = canvas.height;
-	
-	//Clear the canvas
-	ctx.clearRect(0, 0, width, height);
-	
-	//Set the line color
-	ctx.strokeStyle = "black";
-	ctx.lineWidth = 1;
-	
-	ctx.beginPath();
-	//Draw horizontal lines
-	for(i = cellSide; i < height; i += cellSide)
-	{
-		ctx.moveTo(0, i);
-		ctx.lineTo(width, i);
-	}
-	
-	//Draw horizontal lines
-	for(i = cellSide; i < width; i += cellSide)
-	{
-		ctx.moveTo(i, 0);
-		ctx.lineTo(i, height);
-	}
-	ctx.stroke();
-	ctx.closePath();
-	
-	//Initialize the board to being empty
-	cellXCount = canvas.width / cellSide;
-	cellYCount = canvas.height / cellSide;
-	boardVals = new Array(cellXCount);
-	
-	for(i = 0; i < cellXCount; i++)
-	{
-		boardVals[i] = new Array(cellYCount);
-
-		for(j = 0; j < cellYCount; j++)
+	if(canvas.getContext) {
+		ctx = canvas.getContext("2d");
+		
+		//Size the canvas to the screen
+		ctx.canvas.width  = window.innerWidth - (window.innerWidth % cellSide);
+		ctx.canvas.height = ctx.canvas.width;
+		
+		var width = canvas.width;
+		var height = canvas.height;
+		
+		//Clear the canvas
+		ctx.clearRect(0, 0, width, height);
+		
+		//Set the line color
+		ctx.strokeStyle = "black";
+		ctx.lineWidth = 1;
+		
+		ctx.beginPath();
+		//Draw horizontal lines
+		for(i = cellSide; i < height; i += cellSide)
 		{
-			boardVals[i][j] = 0;
-		}	
-	}
-}	
+			ctx.moveTo(0, i);
+			ctx.lineTo(width, i);
+		}
+		
+		//Draw horizontal lines
+		for(i = cellSide; i < width; i += cellSide)
+		{
+			ctx.moveTo(i, 0);
+			ctx.lineTo(i, height);
+		}
+		ctx.stroke();
+		ctx.closePath();
+		
+		//Initialize the board to being empty
+		cellXCount = canvas.width / cellSide;
+		cellYCount = canvas.height / cellSide;
+		boardVals = new Array(cellXCount);
+		
+		for(i = 0; i < cellXCount; i++)
+		{
+			boardVals[i] = new Array(cellYCount);
+
+			for(j = 0; j < cellYCount; j++)
+			{
+				boardVals[i][j] = 0;
+			}	
+		}
+	}	
 }
 
 function reset()
@@ -69,6 +75,7 @@ function reset()
 
 	if(canvas.getContext) {
 		var ctx = canvas.getContext("2d");
+
 		var width = canvas.width;
 		var height = canvas.height;
 		
@@ -203,9 +210,19 @@ function step()
 	}
 }
 
-function run()
+function runSwitch()
 {
-	runVar = setInterval(function(){step()}, 500);
+	if(!running)
+	{
+		running = true;
+		runVar = setInterval(function(){step()}, 250);
+	}
+	
+	else
+	{
+		running = false;
+		clearInterval(runVar);
+	}
 }
 
 function stop()
@@ -256,6 +273,8 @@ var posY = evt.clientY - canvas.offsetTop;
 //Determine which cell the user clicked in
 var cellX = Math.floor(posX / cellSide);
 var cellY = Math.floor(posY / cellSide);	
+
+//alert(cellX + " " + cellY);
 
 //Turn the cell on or off;
 flipCell(cellX, cellY);
