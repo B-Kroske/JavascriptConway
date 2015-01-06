@@ -13,6 +13,11 @@ var cellYCount;
 var runVar;
 var running = false;
 
+function findwidth()
+{
+    return window.innerWidth / 3;
+}   
+
 //Draw the lines to divide the canvas into squares
 function initCanvas()
 {
