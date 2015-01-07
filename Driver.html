@@ -4,10 +4,24 @@
 		<title>Conway's Game of Life</title>
 		<!-- Link to the JS-file -->
 		<script type="text/javascript" src="Conway.js"></script>
+		<script type="application/javascript" src="fastclick.js"></script>
+		<script type="application/javascript">
+	    /*window.addEventListener('load', function() {
+		    new FastClick(document.body);
+		    Array.prototype.forEach.call(document.getElementById("board"), function(button) {
+			    button.addEventListener('click', handleEvent(event), false);
+		    });
+	    }, false);*/
+	    window.addEventListener('load', function() {
+		    new FastClick(document.getElementById("board"));
+		    console.log("Fastclick did something");
+	    }, false);
+    </script>
 		
 		<style>
 			canvas { border: 1px solid black; }
-			button { width: findwidth(); font-size: 3em;}
+			button { width: 5em; font-size: 3em;}
+			body { -webkit-touch-callout: none; -webkit-text-size-adjust: none; -webkit-user-select: none; -webkit-highlight: none; -webkit-tap-highlight-color: rgba(0,0,0,0); }
 		</style>
 	</head>
 	<body onload="initCanvas();" >
@@ -16,7 +30,7 @@
 		<p onclick="farewell()">Click Here Too</p>
 		<p><script type="text/javascript" src="HelloWorld.js">Testing 1, 2, 3...</script></p>
 		-->
-		<canvas id="board" onclick=handleEvent(event)></canvas>
+		<canvas id="board" onclick="handleEvent(event)"></canvas>
 		</br>
 		<button type="button" onclick="runSwitch()">Start/Stop</button>
 		<button type="button" onclick="step()">Step</button>
