@@ -219,12 +219,15 @@ function runSwitch()
 {
 	if(!running)
 	{
+	    document.getElementById("startStop").childNodes[0].nodeValue = "Stop";
 		running = true;
 		runVar = setInterval(function(){step()}, 250);
+		
 	}
 	
 	else
 	{
+	    document.getElementById("startStop").childNodes[0].nodeValue = "Start";
 		running = false;
 		clearInterval(runVar);
 	}
@@ -236,7 +239,8 @@ function stop()
 }
 
 function handleEvent(e){
-
+//alert("Handling event");
+//console.log("Handling event");
 //This is boilerplate code to determine where the user clicked (I may use it in the future)
 var evt = e ? e:window.event;
 /*var clickX=0, clickY=0;
