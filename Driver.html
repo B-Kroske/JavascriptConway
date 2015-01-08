@@ -14,7 +14,10 @@
 	    }, false);*/
 	    window.addEventListener('load', function() {
 		    new FastClick(document.getElementById("board"));
-		    console.log("Fastclick did something");
+		    new FastClick(document.getElementById("startStop"));
+		    new FastClick(document.getElementById("step"));
+		    new FastClick(document.getElementById("reset"));
+		    console.log("Fastclick initialized");
 	    }, false);
     </script>
 		
