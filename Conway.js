@@ -287,16 +287,35 @@ flipCell(cellX, cellY);
 //alert(countNeighbors(cellX, cellY));
 }
 
+module("Backbone.Router", {
 
+    setup: function() {
+      location = new Location('http://example.com');
+      Backbone.history = _.extend(new Backbone.History, {location: location});
+      router = new Router({testing: 101});
+      Backbone.history.interval = 9;
+      Backbone.history.start({pushState: false});
+      lastRoute = null;
+      lastArgs = [];
+      Backbone.history.on('route', onRoute);
+    },
+
+    teardown: function() {
+      Backbone.history.stop();
+      Backbone.history.off('route', onRoute);
+    }
+
+});
 
 //This is necessary to allow import and export of games
 var Gamespace = Backbone.Router.extend({
 
   routes: {
-    "state/:saved":                 "state",    // #state/number
+    "state/:saved": "setState",    // #state/number
   },
 
-  state: function(saved) {
+  setState: function(saved) {
+    console.log("Did this do anything?");
     //Initialize the board to the specified values
     alert(saved);
   }
