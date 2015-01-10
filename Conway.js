@@ -13,10 +13,6 @@ var cellYCount;
 var runVar;
 var running = false;
 
-function findwidth()
-{
-    return window.innerWidth / 3;
-}   
 
 //Draw the lines to divide the canvas into squares
 function initCanvas()
@@ -290,3 +286,19 @@ flipCell(cellX, cellY);
 //countNeighbors(cellX, cellY)
 //alert(countNeighbors(cellX, cellY));
 }
+
+
+
+//This is necessary to allow import and export of games
+var Gamespace = Backbone.Router.extend({
+
+  routes: {
+    "state/:saved":                 "state",    // #state/number
+  },
+
+  state: function(saved) {
+    //Initialize the board to the specified values
+    alert(saved);
+  }
+
+});
