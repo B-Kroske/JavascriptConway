@@ -1,7 +1,9 @@
 //The gameboard
 var boardVals;
 
-var cellSide = (window.innerWidth - 20) / 16
+//cps = cells per side
+var cps = 16;
+var cellSide = (window.innerWidth - 20) / cps
 var cellMid = cellSide / 2;
 
 var canvas;
@@ -13,6 +15,63 @@ var cellYCount;
 var runVar;
 var running = false;
 
+//This is for converting between hex and binary
+var binLookupTable = {
+        '0': '0000', '1': '0001', '2': '0010', '3': '0011', '4': '0100',
+        '5': '0101', '6': '0110', '7': '0111', '8': '1000', '9': '1001',
+        'a': '1010', 'b': '1011', 'c': '1100', 'd': '1101',
+        'e': '1110', 'f': '1111',
+        'A': '1010', 'B': '1011', 'C': '1100', 'D': '1101',
+        'E': '1110', 'F': '1111'
+    };
+
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+}
+
+function loadBoard()
+{
+    var param = getURLParameter("state");
+    var binVal;
+    var absPos;
+    alert(param);
+    if(param != null)
+    {
+        //Split the hex string and convert to binary
+        for(var i = 0; i < param.length; i++)
+        {
+            if(binLookupTable.hasOwnProperty(param[i]))
+            {
+                binVal = binLookupTable[param[i]];
+                absPos = i * 4;
+                //console.log(absPos + " " + binVal);
+                for(var j = 0; j < 4; j++)
+                {
+                    //console.log(j + ": " + (binVal[j] == '1'));
+                    //console.log(Math.floor(absPos / cps) + " " + ((absPos % cps) + j));
+                    boardVals[Math.floor(absPos/cps)][absPos%cps + j] = (binVal[j] == '1')
+                }
+                //console.log(i + "th set complete");
+            }
+            else
+                break;
+        }
+        //Draw the entire board
+        drawBoard();
+    }
+}
+
+//Draw the entire board
+function drawBoard()
+{
+    for(var i = 0; i < cps; i++)
+    {
+        for(var j = 0; j < cps; j++)
+        {
+            drawCell(i, j, boardVals[i][j]);
+        }
+    }
+}
 
 //Draw the lines to divide the canvas into squares
 function initCanvas()
@@ -52,22 +111,26 @@ function initCanvas()
 		}
 		ctx.stroke();
 		ctx.closePath();
-		
-		//Initialize the board to being empty
-		cellXCount = canvas.width / cellSide;
-		cellYCount = canvas.height / cellSide;
-		boardVals = new Array(cellXCount);
-		
-		for(i = 0; i < cellXCount; i++)
-		{
-			boardVals[i] = new Array(cellYCount);
+	}
+	
+	
+	//Initialize the board to being empty
+	cellXCount = cps; //canvas.width / cellSide;
+	cellYCount = cps; //canvas.height / cellSide;
+	boardVals = new Array(cellXCount);
+	
+	for(i = 0; i < cellXCount; i++)
+	{
+		boardVals[i] = new Array(cellYCount);
 
-			for(j = 0; j < cellYCount; j++)
-			{
-				boardVals[i][j] = 0;
-			}	
-		}
+		for(j = 0; j < cellYCount; j++)
+		{
+			boardVals[i][j] = 0;
+		}	
 	}	
+	
+	//Load the board state
+	loadBoard();
 }
 
 function reset()
