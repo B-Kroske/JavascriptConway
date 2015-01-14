@@ -34,12 +34,12 @@ function loadBoard()
     var param = getURLParameter("state");
     var binVal;
     var absPos;
-    alert(param);
     if(param != null)
     {
         //Split the hex string and convert to binary
         for(var i = 0; i < param.length; i++)
         {
+            //console.log(i);
             if(binLookupTable.hasOwnProperty(param[i]))
             {
                 binVal = binLookupTable[param[i]];
@@ -68,10 +68,13 @@ function drawBoard()
     {
         for(var j = 0; j < cps; j++)
         {
-            drawCell(i, j, boardVals[i][j]);
+
+            drawCell(i, j, boardVals[j][i]);
         }
     }
 }
+
+
 
 //Draw the lines to divide the canvas into squares
 function initCanvas()
@@ -204,14 +207,20 @@ function countNeighbors(x, y)
 }
 
 
-//Y is used first when accessing a cell
+
 function flipCell(cellX, cellY)
 {
 	drawCell(cellX, cellY, !boardVals[cellY][cellX]);
 }
 
+//Y is used first when accessing a cell this is because I use Row then column to access cells in a 2D array.
 function drawCell(cellX, cellY, stat)
 {
+    /*if(stat){
+    console.log("Drawing " + cellX + " " + cellY);
+        console.log(stat + " == " + boardVals[cellX][cellY] + " == " + boardVals[cellY][cellX]);
+    }*/
+    
 	//Accounting for the width of the edges and the weirdness at the very edges of the field
 	var edgeAddX = (cellX == 0) ? 0 : 1;
 	var edgeAddY = (cellY == 0) ? 0 : 1;
