@@ -23,12 +23,20 @@ var binLookupTable = {
         'e': '1110', 'f': '1111',
         'A': '1010', 'B': '1011', 'C': '1100', 'D': '1101',
         'E': '1110', 'F': '1111'
-    };
+};
+
+var hexLookupTable = {
+       '0000' : '0', '0001' : '1', '0010' : '2', '0011' : '3', '0100' : '4',
+       '0101' : '5', '0110' : '6', '0111' : '7', '1000' : '8', '1001' : '9',
+       '1010' : 'a', '1011' : 'b', '1100' : 'c', '1101' : 'd',
+       '1110' : 'e', '1111' : 'f',
+};
 
 function getURLParameter(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
 
+//This takes the state parameter and loads the board based on it
 function loadBoard()
 {
     var param = getURLParameter("state");
@@ -74,11 +82,40 @@ function drawBoard()
     }
 }
 
-
+function saveState() {
+    var savedState = "";
+    var binVal = ""
+    //Read through the board and generate a string
+    for(var i = 0; i < cps; i++)
+    {
+        for(var j = 0; j < cps; j++)
+        {
+            if(boardVals[i][j])
+                binVal += '1';
+            else
+                binVal += '0';
+            
+            //If we have enough bits for a hex val, then add it to the end of the state
+            if(binVal.length == 4)
+            {
+                savedState += hexLookupTable[binVal];
+                binVal = "";
+            }
+        }
+    }
+    
+    if(~window.location.href.indexOf("state"))
+        window.location.href = window.location.href.replace(/state=[0-9a-f]+/, "state=" + savedState);
+        
+    else
+        window.location.href = window.location.href + "?state=" + savedState;  
+        //window.location.href = window.location.href.replace( + savedState;
+}
 
 //Draw the lines to divide the canvas into squares
 function initCanvas()
 {
+
 	canvas = document.getElementById("board");
 
 	if(canvas.getContext) {
